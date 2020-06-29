@@ -1,13 +1,15 @@
 package com.gabrieldb.course.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "tb_user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +18,9 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String phone;
+    @JsonIgnore //to avoid recursive repetition
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
     public User() {}
 
@@ -66,6 +71,8 @@ public class User implements Serializable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public List<Order> getOrders() { return orders;}
 
     @Override
     public boolean equals(Object o) {
